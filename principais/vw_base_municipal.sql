@@ -6,6 +6,7 @@ SELECT
     uf.sigla_uf,
     uf.regiao,
     cm.categoria_metropolitana,
+    COALESCE(cm.categoria_metropolitana, 'Não Possui') AS categoria_metropolitana,
     cm.rm_prioritaria,
     sg.subgrupo,
     m.semiarido_2022,
@@ -64,9 +65,15 @@ SELECT
     pae.prestador_esgoto_sinisa AS prestadores_servico_esgoto,
     pae.natureza_juridica_prestadores_esgoto,
     pae.area_atuacao_prestadores_esgoto,
-    gm.OGM2001 AS existencia_entidade_regulacao_agua,
+    CASE
+    WHEN gm.OGM2001 IS TRUE THEN 'Possui'
+    WHEN gm.OGM2001 IS FALSE OR gm.OGM3004 IS NULL THEN 'Não possui'
+  END AS existencia_entidade_regulacao_agua,
     gm.OGM2003 AS nome_entidade_regulacao_agua,
-    gm.OGM2101 AS existencia_entidade_regulacao_esgoto,
+      CASE
+    WHEN gm.OGM2101 IS TRUE THEN 'Possui'
+    WHEN gm.OGM2101 IS FALSE OR gm.OGM3004 IS NULL THEN 'Não possui'
+  END AS existencia_entidade_regulacao_esgoto,
     gm.OGM2103 AS nome_entidade_regulacao_esgoto, 
     gm.OGM2201 AS existencia_entidade_regulacao_residuos,
     gm.OGM2203 AS nome_entidade_regulacao_residuos,
