@@ -5,7 +5,6 @@ SELECT
     m.nome_municipio,
     uf.sigla_uf,
     uf.regiao,
-    cm.categoria_metropolitana,
     COALESCE(cm.categoria_metropolitana, 'Não Possui') AS categoria_metropolitana,
     cm.rm_prioritaria,
     sg.subgrupo,
@@ -67,12 +66,12 @@ SELECT
     pae.area_atuacao_prestadores_esgoto,
     CASE
     WHEN gm.OGM2001 IS TRUE THEN 'Possui'
-    WHEN gm.OGM2001 IS FALSE OR gm.OGM3004 IS NULL THEN 'Não possui'
+    WHEN gm.OGM2001 IS FALSE OR gm.OGM2001 IS NULL THEN 'Não possui'
   END AS existencia_entidade_regulacao_agua,
     gm.OGM2003 AS nome_entidade_regulacao_agua,
       CASE
     WHEN gm.OGM2101 IS TRUE THEN 'Possui'
-    WHEN gm.OGM2101 IS FALSE OR gm.OGM3004 IS NULL THEN 'Não possui'
+    WHEN gm.OGM2101 IS FALSE OR gm.OGM2101 IS NULL THEN 'Não possui'
   END AS existencia_entidade_regulacao_esgoto,
     gm.OGM2103 AS nome_entidade_regulacao_esgoto, 
     gm.OGM2201 AS existencia_entidade_regulacao_residuos,
