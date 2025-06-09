@@ -154,3 +154,6 @@ FROM territorio.tb_municipio as m
  
  SELECT 
  COUNT(*) FROM territorio.vw_base_municipal;
+
+
+ ---teste git
