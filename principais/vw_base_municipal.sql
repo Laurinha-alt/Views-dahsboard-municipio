@@ -101,7 +101,51 @@ SELECT
     f.ifdm_2016 AS  indice_firjan_2016,
     cap.capag AS  capag_municipal,
     m.latitude AS latitude_sede,
-    m.longitude AS longitude_sede
+    m.longitude AS longitude_sede,
+    c10103.dppo_agua_rede_urbana,
+    c10103.dppo_agua_poco_prof_urbana,
+    c10103.dppo_agua_poco_raso_urbana,
+    c10103.dppo_agua_nascente_urbana,
+    c10103.dppo_agua_pipa_urbana,
+    c10103.dppo_agua_chuva_urbana,
+    c10103.dppo_agua_rio_acude_urbana,
+    c10103.dppo_agua_outra_urbana,
+    c10103.dppo_agua_rede_rural,
+    c10103.dppo_agua_poco_prof_rural,
+    c10103.dppo_agua_poco_raso_rural,
+    c10103.dppo_agua_nascente_rural,
+    c10103.dppo_agua_pipa_rural,
+    c10103.dppo_agua_chuva_rural,
+    c10103.dppo_agua_rio_acude_rural,
+    c10103.dppo_agua_outra_rural,
+    c10105.dppo_esgoto_rede_urbana,
+    c10105.dppo_esgoto_fossa_septica_lig_rede_urbana,
+    c10105.dppo_esgoto_fossa_septica_nao_lig_rede_urbana,
+    c10105.dppo_esgoto_fossa_rudimentar_urbana,
+    c10105.dppo_esgoto_vala_urbana,
+    c10105.dppo_esgoto_rio_lago_mar_urbana,
+    c10105.dppo_esgoto_outra_forma_urbana,
+    c10105.dppo_esgoto_sem_ban_nem_sanit_urbana,
+    c10105.dppo_esgoto_rede_rural,
+    c10105.dppo_esgoto_fossa_septica_lig_rede_rural ,
+    c10105.dppo_esgoto_fossa_septica_nao_lig_rede_rural,
+    c10105.dppo_esgoto_fossa_rudimentar_rural,
+    c10105.dppo_esgoto_vala_rural,
+    c10105.dppo_esgoto_rio_lago_mar_rural,
+    c10105.dppo_esgoto_outra_forma_rural ,
+    c10105.dppo_esgoto_sem_ban_nem_sanit_rural,
+    c10109.dppo_lixo_coletado_domicilio_urbana,
+    c10109.dppo_lixo_depositado_cacamba_urbana,
+    c10109.dppo_lixo_queimado_urbana,
+    c10109.dppo_lixo_enterrado_urbana,
+    c10109.dppo_lixo_jogado_terreno_encosta_urbana,
+    c10109.dppo_lixo_outro_destino_urbana,
+    c10109.dppo_lixo_coletado_domicilio_rural,
+    c10109.dppo_lixo_depositado_cacamba_rural,
+    c10109.dppo_lixo_queimado_rural,
+    c10109.dppo_lixo_enterrado_rural,
+    c10109.dppo_lixo_jogado_terreno_encosta_rural,
+    c10109.dppo_lixo_outro_destino_rural
 FROM territorio.tb_municipio as m
     LEFT JOIN territorio.tb_uf AS uf 
 		ON m.cod_uf = uf.cod_uf 
@@ -117,7 +161,7 @@ FROM territorio.tb_municipio as m
 		ON m.cod_municipio = c4712.cod_municipio 
     LEFT JOIN censo.tb_censo_2022_tabela_9922 AS c9922 
 		ON m.cod_municipio = c9922.cod_municipio
-	LEFT JOIN censo.tb_censo_2022_tabela_9923 AS c9923 
+  	LEFT JOIN censo.tb_censo_2022_tabela_9923 AS c9923 
 		ON m.cod_municipio = c9923.cod_municipio
     LEFT JOIN censo.tb_censo_2022_tabela_9956 AS c9956 
 		ON m.cod_municipio = c9956.cod_municipio 
@@ -125,7 +169,7 @@ FROM territorio.tb_municipio as m
 		ON m.cod_municipio = gm.cod_municipio 
     LEFT JOIN sinisa.tb_sinisa_agua AS sa
 		ON m.cod_municipio = sa.cod_municipio
-	LEFT JOIN sinisa.tb_sinisa_residuo AS sr
+	  LEFT JOIN sinisa.tb_sinisa_residuo AS sr
 		ON m.cod_municipio = sr.cod_municipio
     LEFT JOIN sinisa.tb_snis_serie_historica AS sh
 		ON m.cod_municipio = sh.cod_municipio AND sh.ano_referencia = 2022
@@ -150,14 +194,18 @@ FROM territorio.tb_municipio as m
     LEFT JOIN territorio.vw_adimplencia AS ad
     	ON m.cod_municipio = ad.cod_municipio
     LEFT JOIN territorio.vw_prestadores_agua_esgoto AS pae
-    	ON m.cod_municipio = pae.cod_municipio;
+    	ON m.cod_municipio = pae.cod_municipio
+    LEFT JOIN censo.tb_censo_2022_tabela_10103 AS c10103
+    ON m.cod_municipio = c10103.cod_municipio
+    LEFT JOIN censo.tb_censo_2022_tabela_10105 AS c10105
+    ON m.cod_municipio = c10105.cod_municipio
+    left join censo.tb_censo_2022_tabela_10109 AS c10109
+    ON m.cod_municipio = c10109.cod_municipio;
+
  
  SELECT 
  COUNT(*) FROM territorio.vw_base_municipal;
 
-<<<<<<< HEAD
-
- ---teste git
-=======
  --testando git
->>>>>>> 493e0f5 (alteracao andre teste)
+ --testando 2
+5348981 (Adicionando dados do Censo 2022 sobre água, esgoto e lixo (urbano e rural))
