@@ -145,7 +145,21 @@ SELECT
     c10109.dppo_lixo_queimado_rural,
     c10109.dppo_lixo_enterrado_rural,
     c10109.dppo_lixo_jogado_terreno_encosta_rural,
-    c10109.dppo_lixo_outro_destino_rural
+    c10109.dppo_lixo_outro_destino_rural,
+    c10107.dppo_1_ban_exclus_urbana,
+    c10107.dppo_2_ban_exclus_urbana,
+    c10107.dppo_3_ban_exclus_urbana,
+    c10107.dppo_4_ban_exclus_urbana,
+    c10107.dppo_ban_uso_comum_urbana,
+    c10107.dppo_sanit_buraco_urbana,
+    c10107.dppo_sem_ban_nem_sanit_urbana,
+    c10107.dppo_1_ban_exclus_rural,
+    c10107.dppo_2_ban_exclus_rural,
+    c10107.dppo_3_ban_exclus_rural,
+    c10107.dppo_4_ban_exclus_rural,
+    c10107.dppo_ban_uso_comum_rural,
+    c10107.dppo_sanit_buraco_rural,
+    c10107.dppo_sem_ban_nem_sanit_rural
 FROM territorio.tb_municipio as m
     LEFT JOIN territorio.tb_uf AS uf 
 		ON m.cod_uf = uf.cod_uf 
@@ -199,8 +213,10 @@ FROM territorio.tb_municipio as m
     ON m.cod_municipio = c10103.cod_municipio
     LEFT JOIN censo.tb_censo_2022_tabela_10105 AS c10105
     ON m.cod_municipio = c10105.cod_municipio
-    left join censo.tb_censo_2022_tabela_10109 AS c10109
-    ON m.cod_municipio = c10109.cod_municipio;
+    LEFT JOIN censo.tb_censo_2022_tabela_10109 AS c10109
+    ON m.cod_municipio = c10109.cod_municipio
+    LEFT JOIN censo.tb_censo_2022_tabela_10107 AS c10107
+    ON m.cod_municipio = c10107.cod_municipio;
 
  
  SELECT 
