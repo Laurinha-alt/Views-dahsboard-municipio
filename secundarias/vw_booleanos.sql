@@ -1,3 +1,4 @@
+DROP MATERIALIZED VIEW territorio.vw_booleanos;
 CREATE MATERIALIZED VIEW territorio.vw_booleanos AS
 SELECT
   CASE
