@@ -222,19 +222,17 @@ SELECT
     cu.qtde_familias_pobreza_urbana,
     cu.qtde_familias_ate_meio_sm_urbana,
     cu.qtde_familias_acima_meio_sm_urbana,
-    cu.qtde_familias_baixa_renda_urbana,
     cu.qtde_familias_pobreza_rural,
     cu.qtde_familias_ate_meio_sm_rural,
     cu.qtde_familias_acima_meio_sm_rural,
     cu.percentual_familias_pobreza_baixa_renda_rural,
-    cu.qtde_familias_baixa_renda_rural,
     cu.qtde_familias_lixo_coleta_diretamente,
     cu.qtde_familias_lixo_coleta_indiretamente,
-	  cu.qtde_familias_lixo_queimado_enterrado,
-	  cu.qtde_familias_lixo_terreno_baldio_logradouro,
-	  cu.qtde_familias_lixo_riolagomar,
-	  cu.qtde_familias_lixo_outras,
-	  cu.qtde_familias_lixo_sem_info
+    cu.qtde_familias_lixo_queimado_enterrado,
+    cu.qtde_familias_lixo_terreno_baldio_logradouro,
+    cu.qtde_familias_lixo_riolagomar,
+    cu.qtde_familias_lixo_outras,
+    cu.qtde_familias_lixo_sem_info
 FROM territorio.tb_municipio as m
     LEFT JOIN territorio.tb_uf AS uf 
 		ON m.cod_uf = uf.cod_uf 
