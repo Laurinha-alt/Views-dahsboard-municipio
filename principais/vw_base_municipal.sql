@@ -1,4 +1,4 @@
-DROP MATERIALIZED VIEW territorio.vw_base_municipal;
+DROP MATERIALIZED VIEW IF EXISTS territorio.vw_base_municipal;
 CREATE MATERIALIZED VIEW territorio.vw_base_municipal AS 
 SELECT
     m.cod_municipio,
@@ -197,38 +197,44 @@ SELECT
     ad.adimplencia_esgoto AS sinisa_adimplencia_esgoto,
     ad.adimplencia_residuos AS sinisa_adimplencia_residuos,
     ad.adimplencia_aguas_pluviais AS sinisa_adimplencia_aguas_pluviais,
-    vw.cod_municipio,
-    vw.qtde_familias_baixa_renda_urbana,
-    vw.qtde_familias_baixa_renda_rural,
+    cu.qtde_familias_baixa_renda_urbana,
+    cu.qtde_familias_baixa_renda_rural,
     cu.referencia,
     cu.UF,
-    cu.qtde_familias_nbf_rede,
-    cu.qtde_familias_nbf_fossa_septica,
-    cu.qtde_familias_nbf_fossa_rudimentar,
-    cu.qtde_familias_nbf_vala,
-    cu.qtde_familias_nbf_riolagomar,
-    cu.qtde_familias_nbf_outras_formas,
-    cu.qtde_familias_nbf_sem_info,
-    cu.qtde_familias_bf_rede,
-    cu.qtde_familias_bf_fossa_septica,
-    cu.qtde_familias_bf_fossa_rudimentar,
-    cu.qtde_familias_bf_vala,
-    cu.qtde_familias_bf_riolagomar,
-    cu.qtde_familias_bf_outras_formas,
-    cu.qtde_familias_bf_sem_info,
-    cu.qtde_familias_rede_geral,
-    cu.qtde_familias_poco_nascente,
-    cu.qtde_familias_cisterna,
-    cu.qtde_familias_outras_formas,
-    cu.qtde_familias_sem_info,
+    cu.qtde_familias_esgoto_nbf_rede,
+    cu.qtde_familias_esgoto_nbf_fossa_septica,
+    cu.qtde_familias_esgoto_nbf_fossa_rudimentar,
+    cu.qtde_familias_esgoto_nbf_vala,
+    cu.qtde_familias_esgoto_nbf_riolagomar,
+    cu.qtde_familias_esgoto_nbf_outras,
+    cu.qtde_familias_esgoto_nbf_sem_info,
+    cu.qtde_familias_esgoto_bf_rede,
+    cu.qtde_familias_esgoto_bf_fossa_septica,
+    cu.qtde_familias_esgoto_bf_fossa_rudimentar,
+    cu.qtde_familias_esgoto_bf_vala,
+    cu.qtde_familias_esgoto_bf_riolagomar,
+    cu.qtde_familias_esgoto_bf_outras,
+    cu.qtde_familias_esgoto_bf_sem_info,
+    cu.qtde_familias_agua_poco_nascente,
+    cu.qtde_familias_agua_cisterna,
+    cu.qtde_familias_agua_outras,
+    cu.qtde_familias_agua_sem_info,
     cu.qtde_familias_pobreza_urbana,
     cu.qtde_familias_ate_meio_sm_urbana,
     cu.qtde_familias_acima_meio_sm_urbana,
+    cu.qtde_familias_baixa_renda_urbana,
     cu.qtde_familias_pobreza_rural,
     cu.qtde_familias_ate_meio_sm_rural,
     cu.qtde_familias_acima_meio_sm_rural,
     cu.percentual_familias_pobreza_baixa_renda_rural,
-    cu.nome_municipio
+    cu.qtde_familias_baixa_renda_rural,
+    cu.qtde_familias_lixo_coleta_diretamente,
+    cu.qtde_familias_lixo_coleta_indiretamente,
+	  cu.qtde_familias_lixo_queimado_enterrado,
+	  cu.qtde_familias_lixo_terreno_baldio_logradouro,
+	  cu.qtde_familias_lixo_riolagomar,
+	  cu.qtde_familias_lixo_outras,
+	  cu.qtde_familias_lixo_sem_info
 FROM territorio.tb_municipio as m
     LEFT JOIN territorio.tb_uf AS uf 
 		ON m.cod_uf = uf.cod_uf 
@@ -290,45 +296,6 @@ FROM territorio.tb_municipio as m
     	ON m.cod_municipio = c10107.cod_municipio
     LEFT JOIN instrumento.tb_municipio_elegivel_rural_2025 AS el
     	ON m.cod_municipio = el.cod_municipio
-    LEFT JOIN temporario.vw_cadunico_cod7 AS vw
-        ON m.cod_municipio = vw.cod_municipio
     LEFT JOIN dados_gerais.tb_cadunico AS cu
        ON m.cod_municipio = cu.cod_municipio
-    WHERE cu.referencia = 'jun/25';
-
-SELECT cod_municipio, 
-	sinisa_domicilios_sem_coleta_residuos_solidos_rural, 
-	sinisa_domicilios_coleta_residuos_solidos_rural 
-	FROM sinisa.vw_calculos_atendimento_adequado_nao_adequado_sinisa 
-	WHERE sinisa_domicilios_coleta_residuos_solidos_rural = 0;
-
-SELECT cod_municipio, 
-	sinisa_domicilios_sem_coleta_residuos_solidos_urbana, 
-	sinisa_domicilios_coleta_residuos_solidos_urbana 
-	FROM sinisa.vw_calculos_atendimento_adequado_nao_adequado_sinisa 
-	WHERE sinisa_domicilios_sem_coleta_residuos_solidos_urbana = 0 AND sinisa_domicilios_coleta_residuos_solidos_urbana = 0;
-
-SELECT cod_municipio,
-	--COALESCE(ana.sinisa_agua_nao_adequado_rural::DOUBLE PRECISION / (ana.sinisa_agua_adequado_rural::DOUBLE PRECISION + ana.sinisa_agua_nao_adequado_rural::DOUBLE PRECISION),0) AS deficit_agua_rural_sinisa,
-	--COALESCE(ana.sinisa_esgoto_nao_adequado_rural::DOUBLE PRECISION / (ana.sinisa_esgoto_adequado_rural::DOUBLE PRECISION + ana.sinisa_esgoto_nao_adequado_rural::DOUBLE PRECISION),0) AS deficit_esgoto_rural_sinisa,
-	COALESCE(ana.sinisa_domicilios_sem_coleta_residuos_solidos_rural::DOUBLE PRECISION / NULLIF((ana.sinisa_domicilios_coleta_residuos_solidos_rural::DOUBLE PRECISION + ana.sinisa_domicilios_sem_coleta_residuos_solidos_rural::DOUBLE PRECISION),0),0) AS deficit_residuo_rural_sinisa
-	FROM sinisa.vw_calculos_atendimento_adequado_nao_adequado_sinisa AS ana;
-
-SELECT cod_municipio, 
-	nome_municipio, 
-	sinisa_residuo_nao_adequado_rural, 
-	sinisa_residuo_adequado_rural 
-	FROM territorio.vw_base_municipal
-	WHERE cod_municipio = 1504208;
-
-SELECT count(cod_municipio)
-	FROM territorio.vw_base_municipal
-	WHERE deficit_agua_rural_sinisa IS NULL;
-
-SELECT cod_municipio, nome_municipio, ranking_residuo_nao_adequado_sinisa, sinisa_residuo_nao_adequado_rural, sinisa_residuo_adequado_rural, deficit_residuo_rural_sinisa
-	FROM territorio.vw_base_municipal 
-	ORDER BY ranking_residuo_nao_adequado_sinisa ASC, deficit_residuo_rural_sinisa;
-
-SELECT * FROM territorio.vw_base_municipal WHERE territorio.vw_base_municipal.nome_municipio = 'Brasília';
-
-SELECT cod_municipio, dppo_rural, dppo_agua_nao_adequado_rural, dppo_agua_adequado_rural, deficit_agua_rural_ibge FROM territorio.vw_base_municipal WHERE deficit_agua_rural_ibge = 0;
+;
